@@ -3,12 +3,18 @@ using Recipe.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Recipe.Controllers
 {
+  [Authorize]
   public class TagsController : Controller
   {
     private readonly RecipeContext _db;
+    private readonly UserManager<IdentityUser> _userManager;
     public TagsController(RecipeContext db)
     {
       _db = db;
@@ -98,5 +104,7 @@ namespace Recipe.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
+
+    
   }
 }

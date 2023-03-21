@@ -4,12 +4,14 @@
 
 @model Recipe.Models.Recipe;
 
-<h4>Add a new item</h4>
+<h2>Edit</h2>
 
-<p>@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger", @style = "font-weight: 600;" })</p>
+<h4>Edit this item: @Html.DisplayFor(model => model.Description)</h4>
 
 @using (Html.BeginForm())
 {
+  @Html.HiddenFor(model => model.RecipeId)
+
   @Html.LabelFor(model => model.RecipeName)
   @Html.TextBoxFor(model => model.RecipeName)
 
@@ -24,8 +26,8 @@
 
   @Html.LabelFor(model => model.Rating)
   @Html.TextBoxFor(model => model.Rating, new { @type = "number" })
-  
 
-  <input type="submit" value="Add new item" class="btn btn-success" />
+  <input type="submit" value="Save" />
 }
-<p>@Html.ActionLink("Show all items", "Index")</p>
+
+<p>@Html.ActionLink("Back to list", "Index")</p>

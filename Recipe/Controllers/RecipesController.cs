@@ -12,12 +12,12 @@ using System.Security.Claims;
 namespace Recipe.Controllers
 {
   [Authorize]
-  public class ItemsController : Controller
+  public class RecipeController : Controller
   {
     private readonly RecipeContext _db;
     private readonly UserManager<IdentityUser> _userManager;
 
-    public ItemsController(UserManager<IdentityUser> userManager, RecipeContext db)
+    public RecipeController(UserManager<IdentityUser> userManager, RecipeContext db)
     {
       _userManager = userManager;
       _db = db;
@@ -29,7 +29,6 @@ namespace Recipe.Controllers
       IdentityUser currentUser = await _userManager.FindByIdAsync(userId);
       
       List<Recipe.Models.Recipe> userItems = _db.Recipes
-                          .Where(entry => entry.User.Id == currentUser.Id)
                           .ToList();
       userItems.Sort(Recipe.Models.Recipe.CompareRecipeByRating);
       return View(userItems);
@@ -39,7 +38,7 @@ namespace Recipe.Controllers
     {
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       IdentityUser currentUser = await _userManager.FindByIdAsync(userId);
-      ViewBag.Tags = _db.Tags.ToList();
+      //ViewBag.Tags = _db.Tags.ToList();
       return View();
     }
 
@@ -48,7 +47,7 @@ namespace Recipe.Controllers
     {
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       IdentityUser currentUser = await _userManager.FindByIdAsync(userId);
-      recipe.User = currentUser;
+      recipe.User = (ApplicationUser)currentUser;
       _db.Recipes.Add(recipe);
       _db.SaveChanges();
       return RedirectToAction("Index");
