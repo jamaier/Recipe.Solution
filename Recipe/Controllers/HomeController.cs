@@ -21,14 +21,13 @@ namespace Recipe.Controllers
       _db = db;
     }
 
+    [AllowAnonymous]
     [HttpGet("/")]
-    public async Task<ActionResult> Index()
+    public ActionResult Index()
     {
-      string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
       Dictionary<string, object[]> model = new Dictionary<string, object[]>();
-      if (currentUser != null)
-      {
+
         List<Recipe.Models.Recipe> recipes = _db.Recipes.ToList();
 
         recipes.Sort(Recipe.Models.Recipe.CompareRecipeByRating);
@@ -41,7 +40,7 @@ namespace Recipe.Controllers
         Tag[] tags = _db.Tags
                     .ToArray();
         model.Add("tags", tags);
-      }
+
       return View(model);
     }
   }

@@ -23,10 +23,11 @@ namespace Recipe.Controllers
       _db = db;
     }
 
-    public async Task<ActionResult> Index()
+    [AllowAnonymous] 
+    public ActionResult Index()
     {
-      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      //string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      //ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       // List<Recipe.Models.Recipe> userRecipe = _db.Recipes.Where(recipe => recipe.User.Id == currentUser.Id.ToString()).ToList();
 
       List<Recipe.Models.Recipe> userRecipes = _db.Recipes

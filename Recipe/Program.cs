@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Recipe.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace Pecipe
+namespace Recipe
 {
   class Program
   {
