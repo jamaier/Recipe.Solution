@@ -23,11 +23,11 @@ namespace Recipe.Models
       }
       if(x.Rating > y.Rating)
       {
-        return 1;
+        return -1;
       }
       if(x.Rating < y.Rating)
       {
-        return -1;
+        return 1;
       }
       return 0;
     }

@@ -29,10 +29,13 @@ namespace Recipe.Controllers
       Dictionary<string, object[]> model = new Dictionary<string, object[]>();
       if (currentUser != null)
       {
-        Recipe.Models.Recipe[] recipes = _db.Recipes
-                      .ToArray();
+        List<Recipe.Models.Recipe> recipes = _db.Recipes.ToList();
 
-        model.Add("recipes", recipes);
+        recipes.Sort(Recipe.Models.Recipe.CompareRecipeByRating);
+
+        Recipe.Models.Recipe[] recipesSorted = recipes.ToArray();
+
+        model.Add("recipes", recipesSorted);
 
 
         Tag[] tags = _db.Tags

@@ -27,7 +27,8 @@ namespace Recipe.Controllers
     {
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-      
+      // List<Recipe.Models.Recipe> userRecipe = _db.Recipes.Where(recipe => recipe.User.Id == currentUser.Id.ToString()).ToList();
+
       List<Recipe.Models.Recipe> userRecipes = _db.Recipes
                           .ToList();
       userRecipes.Sort(Recipe.Models.Recipe.CompareRecipeByRating);
@@ -38,6 +39,7 @@ namespace Recipe.Controllers
     {
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
       //ViewBag.Tags = _db.Tags.ToList();
       return View();
     }
@@ -47,7 +49,7 @@ namespace Recipe.Controllers
     {
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-      recipe.User = (ApplicationUser)currentUser;
+      recipe.User = currentUser;
       _db.Recipes.Add(recipe);
       _db.SaveChanges();
       return RedirectToAction("Index");
@@ -55,10 +57,10 @@ namespace Recipe.Controllers
 
     public ActionResult Details(int id)
     {
-      Recipe.Models.Recipe thisRecipe= _db.Recipes
+      Recipe.Models.Recipe thisRecipe = _db.Recipes
           .Include(recipe => recipe.JoinEntities)
           .ThenInclude(join => join.Tag)
-          .FirstOrDefault(recipe => recipe.RecipeId== id);
+          .FirstOrDefault(recipe => recipe.RecipeId == id);
       return View(thisRecipe);
     }
 
@@ -68,20 +70,20 @@ namespace Recipe.Controllers
       ViewBag.TagId = new SelectList(_db.Tags, "TagId", "Title");
       return View(thisRecipe);
     }
-  
+
     [HttpPost]
     public ActionResult AddTag(Recipe.Models.Recipe recipe, int tagId)
     {
-      #nullable enable
+#nullable enable
       RecipeTag? joinEntity = _db.RecipeTags.FirstOrDefault(join => (join.TagId == tagId && join.RecipeId == recipe.RecipeId));
-      #nullable disable
+#nullable disable
       if (joinEntity == null && tagId != 0)
       {
         _db.RecipeTags.Add(new RecipeTag() { TagId = tagId, RecipeId = recipe.RecipeId });
         _db.SaveChanges();
       }
       return RedirectToAction("Details", new { id = recipe.RecipeId });
-    }   
+    }
 
 
     public ActionResult Edit(int id)
@@ -98,7 +100,7 @@ namespace Recipe.Controllers
       return RedirectToAction("Index");
     }
 
-      public ActionResult Delete(int id)
+    public ActionResult Delete(int id)
     {
       Recipe.Models.Recipe thisRecipe = _db.Recipes.FirstOrDefault(recipe => recipe.RecipeId == id);
       return View(thisRecipe);
@@ -120,6 +122,6 @@ namespace Recipe.Controllers
       _db.RecipeTags.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Index");
-    } 
+    }
   }
 }

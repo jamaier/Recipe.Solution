@@ -103,7 +103,5 @@ namespace Recipe.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
-
-    
   }
 }
