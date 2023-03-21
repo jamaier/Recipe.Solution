@@ -14,7 +14,6 @@ namespace Recipe.Controllers
   public class TagsController : Controller
   {
     private readonly RecipeContext _db;
-    private readonly UserManager<IdentityUser> _userManager;
     public TagsController(RecipeContext db)
     {
       _db = db;

@@ -13,9 +13,9 @@ namespace Recipe.Controllers
   public class HomeController : Controller
   {
     private readonly RecipeContext _db;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public HomeController(UserManager<IdentityUser> userManager, RecipeContext db)
+    public HomeController(UserManager<ApplicationUser> userManager, RecipeContext db)
     {
       _userManager = userManager;
       _db = db;
@@ -25,12 +25,11 @@ namespace Recipe.Controllers
     public async Task<ActionResult> Index()
     {
       string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      IdentityUser currentUser = await _userManager.FindByIdAsync(userId);
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       Dictionary<string, object[]> model = new Dictionary<string, object[]>();
       if (currentUser != null)
       {
         Recipe.Models.Recipe[] recipes = _db.Recipes
-                      .Where(entry => entry.User.Id == currentUser.Id)
                       .ToArray();
 
         model.Add("recipes", recipes);

@@ -5,9 +5,18 @@
 @using Recipe.Models
 @model Recipe
 
-<h2>Item Details</h2>
+<h2>@Html.DisplayFor(model => model.RecipeName) Details</h2>
 <hr />
 <h3>@Html.DisplayNameFor(model => model.Description): @Html.DisplayFor(model => model.Description)</h3>  
+
+<h1>Ingredients:</h1>
+<p>@Html.DisplayFor(model => model.Ingredients)</p>
+
+<h1>Instructions</h1>
+<p>@Html.DisplayFor(model => model.Instructions)</p>
+
+<h1>Rating:</h1>
+<p>@Html.DisplayFor(model => model.Rating)</p>
 
 @if(@Model.JoinEntities.Count == 0)
 {
@@ -30,6 +39,6 @@ else
 }
 
 <p>@Html.ActionLink("Back to list", "Index")</p>
-<p>@Html.ActionLink("Edit Item or Category", "Edit", new { id = Model.RecipeId })</p>
+<p>@Html.ActionLink("Edit Recipe", "Edit", new { id = Model.RecipeId })</p>
 <p>@Html.ActionLink("Add a Tag", "AddTag", new { id = Model.RecipeId })</p>
 <p>@Html.ActionLink("Delete Item", "Delete", new { id = Model.RecipeId })</p>

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Recipe.Models
 {
-  public class RecipeContext : IdentityDbContext<IdentityUser>
+  public class RecipeContext : IdentityDbContext<ApplicationUser>
   {
     public DbSet<Recipe> Recipes { get; set; }
     public DbSet<Tag> Tags { get; set; }
