@@ -56,13 +56,26 @@ namespace Recipe.Controllers
       return RedirectToAction("Index");
     }
 
-    public ActionResult Details(int id)
+    public async Task<ActionResult> Details(int id)
     {
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
       Recipe.Models.Recipe thisRecipe = _db.Recipes
           .Include(recipe => recipe.JoinEntities)
           .ThenInclude(join => join.Tag)
+          .Include(recipe => recipe.User)
           .FirstOrDefault(recipe => recipe.RecipeId == id);
-      return View(thisRecipe);
+      
+      if(thisRecipe.User.Id == currentUser.Id)
+      {
+        return View(thisRecipe);
+      }
+      else
+      {
+        return RedirectToAction("Index", "Home");
+      }
+
     }
 
     public ActionResult AddTag(int id)
@@ -94,11 +107,22 @@ namespace Recipe.Controllers
     }
 
     [HttpPost]
-    public ActionResult Edit(Recipe.Models.Recipe recipe)
+    public async Task<ActionResult> Edit(Recipe.Models.Recipe recipe)
     {
-      _db.Recipes.Update(recipe);
-      _db.SaveChanges();
-      return RedirectToAction("Index");
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      if(currentUser.Id == recipe.User.Id)
+      {
+        _db.Recipes.Update(recipe);
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+      }
+      else
+      {
+        return RedirectToAction("Index");
+      }
+
+
     }
 
     public ActionResult Delete(int id)
